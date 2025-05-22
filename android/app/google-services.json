@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "770915425309",
+    "project_id": "helen-darling-app",
+    "storage_bucket": "helen-darling-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770915425309:android:1f6c068b9db9bd236e7af4",
+        "android_client_info": {
+          "package_name": "com.example.helen_darling_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZRjgnn0AZcA-HU3VhWoRA9PYxeHCf4Lo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
