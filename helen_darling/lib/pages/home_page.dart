@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 // Você pode precisar de um pacote para exibir notificações locais se quiser
 // mostrar notificações visuais quando o app está em primeiro plano.
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:helen_darling_app/services/purchase_service.dart';
 
 // Converte HomePage para um StatefulWidget
 class HomePage extends StatefulWidget {
@@ -17,7 +18,8 @@ class _HomePageState extends State<HomePage> {
   // Opcional: Inicializar flutter_local_notifications se for usar para foreground
   // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   //     FlutterLocalNotificationsPlugin();
-
+  final PurchaseService _purchaseService = PurchaseService();
+  bool _hasPremium = false;
   @override
   void initState() {
     super.initState();
@@ -34,6 +36,16 @@ class _HomePageState extends State<HomePage> {
     //         macOS: null,
     //         linux: null);
     // flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    _initPurchaseStatus();
+  }
+
+  Future<void> _initPurchaseStatus() async {
+    await _purchaseService.init();
+    final purchased = await _purchaseService.isPurchased();
+    setState(() {
+      _hasPremium = purchased;
+    });
   }
 
   // Função para solicitar permissão e obter o token do dispositivo
@@ -162,7 +174,8 @@ class _HomePageState extends State<HomePage> {
                     'Messages',
                     '/messages',
                   ),
-                  _buildNavButton(context, Icons.more_vert, 'More', '/more'),
+                  if (_hasPremium)
+                    _buildNavButton(context, Icons.more_vert, 'More', '/more'),
                 ],
               ),
             ],
