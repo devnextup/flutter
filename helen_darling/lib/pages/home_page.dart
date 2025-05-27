@@ -174,10 +174,134 @@ class _HomePageState extends State<HomePage> {
                     'Messages',
                     '/messages',
                   ),
-                  if (_hasPremium)
-                    _buildNavButton(context, Icons.more_vert, 'More', '/more'),
+                  // if (_hasPremium)
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+
+                    children: [
+                      GestureDetector(
+                        onTapDown: (TapDownDetails details) {
+                          showMenu(
+                            context: context,
+                            position: RelativeRect.fromLTRB(
+                              details.globalPosition.dx,
+                              details.globalPosition.dy,
+                              0,
+                              0,
+                            ),
+                            items: [
+                              PopupMenuItem<String>(
+                                value: '/settings',
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.settings,
+                                      color: Color(0xFF9A9364),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Settings',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Color(0xFF9A9364),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem<String>(
+                                value: '/profile',
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.person_outline,
+                                      color: Color(0xFF9A9364),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Profile',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Color(0xFF9A9364),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem<String>(
+                                value: '/help',
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.help_outline,
+                                      color: Color(0xFF9A9364),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Help',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Color(0xFF9A9364),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+
+                            color: Color(0xFFF6F1DD),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                              side: BorderSide(
+                                color: const Color(0xFFD7D2C1),
+                                width: 1,
+                              ),
+                            ),
+                          ).then((value) {
+                            if (value != null) {
+                              Navigator.pushNamed(context, value);
+                            }
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF6F1DD),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFFD7D2C1),
+                              width: 1.5,
+                            ),
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          child: const Icon(
+                            Icons.more_vert,
+                            color: Color(0xFF9A9364),
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'More',
+                        style: TextStyle(
+                          color: Color(0xFFA39F91),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
+              // ElevatedButton(
+              //   onPressed: () async {
+              //     await _purchaseService.buyPremium();
+              //     final purchased = await _purchaseService.isPurchased();
+              //     setState(() {
+              //       _hasPremium = purchased;
+              //     });
+              //   },
+              //   child: Text('Comprar acesso premium'),
+              // ),
             ],
           ),
         ),

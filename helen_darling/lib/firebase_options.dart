@@ -41,48 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyARpvq7iQe4e22JaFRjvzaIk2-LwjA5jNI',
-    appId: '1:770915425309:web:9d59a7e9248cd0466e7af4',
-    messagingSenderId: '770915425309',
-    projectId: 'helen-darling-app',
-    authDomain: 'helen-darling-app.firebaseapp.com',
-    storageBucket: 'helen-darling-app.firebasestorage.app',
-    measurementId: 'G-4S1DDCHS2N',
+    apiKey: 'AIzaSyC9iE9ovOvUVLLaXlO9qodaDg0BgLqBG7Y',
+    appId: '1:1094867403596:web:63f47fb74c7d292e4885e9',
+    messagingSenderId: '1094867403596',
+    projectId: 'helen-darling-67ce5',
+    authDomain: 'helen-darling-67ce5.firebaseapp.com',
+    storageBucket: 'helen-darling-67ce5.firebasestorage.app',
+    measurementId: 'G-NMBE30B4GS',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCZRjgnn0AZcA-HU3VhWoRA9PYxeHCf4Lo',
-    appId: '1:770915425309:android:1f6c068b9db9bd236e7af4',
-    messagingSenderId: '770915425309',
-    projectId: 'helen-darling-app',
-    storageBucket: 'helen-darling-app.firebasestorage.app',
+    apiKey: 'AIzaSyCkKQ4xK7v6EKb7JDVm7OrXZjSz0NlcpL8',
+    appId: '1:1094867403596:android:4c9218874bac76bf4885e9',
+    messagingSenderId: '1094867403596',
+    projectId: 'helen-darling-67ce5',
+    storageBucket: 'helen-darling-67ce5.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAPQJ9_548QvweFV7CiX96BmY9iBgzGpSo',
-    appId: '1:770915425309:ios:1bad790847bb0cb86e7af4',
-    messagingSenderId: '770915425309',
-    projectId: 'helen-darling-app',
-    storageBucket: 'helen-darling-app.firebasestorage.app',
+    apiKey: 'AIzaSyCOYOlZaoTsVcm6-tn-27dHjHVfiqxVZHQ',
+    appId: '1:1094867403596:ios:50e897f87ae465784885e9',
+    messagingSenderId: '1094867403596',
+    projectId: 'helen-darling-67ce5',
+    storageBucket: 'helen-darling-67ce5.firebasestorage.app',
     iosBundleId: 'com.example.helenDarlingApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAPQJ9_548QvweFV7CiX96BmY9iBgzGpSo',
-    appId: '1:770915425309:ios:1bad790847bb0cb86e7af4',
-    messagingSenderId: '770915425309',
-    projectId: 'helen-darling-app',
-    storageBucket: 'helen-darling-app.firebasestorage.app',
+    apiKey: 'AIzaSyCOYOlZaoTsVcm6-tn-27dHjHVfiqxVZHQ',
+    appId: '1:1094867403596:ios:50e897f87ae465784885e9',
+    messagingSenderId: '1094867403596',
+    projectId: 'helen-darling-67ce5',
+    storageBucket: 'helen-darling-67ce5.firebasestorage.app',
     iosBundleId: 'com.example.helenDarlingApp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyARpvq7iQe4e22JaFRjvzaIk2-LwjA5jNI',
-    appId: '1:770915425309:web:7b6f1ef5773f3e8e6e7af4',
-    messagingSenderId: '770915425309',
-    projectId: 'helen-darling-app',
-    authDomain: 'helen-darling-app.firebaseapp.com',
-    storageBucket: 'helen-darling-app.firebasestorage.app',
-    measurementId: 'G-NJD4JQ7JQE',
+    apiKey: 'AIzaSyC9iE9ovOvUVLLaXlO9qodaDg0BgLqBG7Y',
+    appId: '1:1094867403596:web:fbb2b439f23ab22a4885e9',
+    messagingSenderId: '1094867403596',
+    projectId: 'helen-darling-67ce5',
+    authDomain: 'helen-darling-67ce5.firebaseapp.com',
+    storageBucket: 'helen-darling-67ce5.firebasestorage.app',
+    measurementId: 'G-C53CW20GT6',
   );
+
 }
