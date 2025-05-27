@@ -1,14 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+// Você pode precisar de um pacote para exibir notificações locais se quiser
+// mostrar notificações visuais quando o app está em primeiro plano.
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin _localNotifications =
+      FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    _requestNotificationPermissions();
+    _initializeFirebaseMessaging();
+    _initializeLocalNotifications();
+  }
+
+  void _requestNotificationPermissions() async {
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('Permissões de notificação concedidas');
+    } else {
+      print('Permissões de notificação negadas');
+    }
+  }
+
+  void _initializeFirebaseMessaging() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Recebeu mensagem no foreground: ${message.notification?.title}');
+      _showLocalNotification(message);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Usuário abriu a notificação');
+      // Você pode navegar para uma página específica aqui, se quiser.
+    });
+
+    _firebaseMessaging.getToken().then((token) {
+      print('Token FCM: $token');
+    });
+  }
+
+  void _initializeLocalNotifications() {
+    const AndroidInitializationSettings androidSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings initSettings = InitializationSettings(
+      android: androidSettings,
+    );
+
+    _localNotifications.initialize(initSettings);
+  }
+
+  void _showLocalNotification(RemoteMessage message) {
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
+          'channel_id',
+          'channel_name',
+          channelDescription: 'Descrição do canal',
+          importance: Importance.max,
+          priority: Priority.high,
+        );
+
+    const NotificationDetails platformDetails = NotificationDetails(
+      android: androidDetails,
+    );
+
+    _localNotifications.show(
+      0,
+      message.notification?.title ?? 'Sem título',
+      message.notification?.body ?? 'Sem conteúdo',
+      platformDetails,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // MANTÉM o mesmo conteúdo do seu `build()` atual (Stack, Column, etc.)
     return Scaffold(
       body: Stack(
         children: [
-          // Imagem de fundo
           SizedBox.expand(
             child: Image.asset('assets/Luke_background.png', fit: BoxFit.cover),
           ),
@@ -21,8 +105,8 @@ class HomePage extends StatelessWidget {
                 // Ícones do topo
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 10,
+                    horizontal: 10.0,
+                    vertical: 0,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,29 +116,53 @@ class HomePage extends StatelessWidget {
                           print('Idioma clicado');
                         },
                         child: const Icon(
-                          Icons.language,
-                          size: 28,
-                          color: Colors.white,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          print('Compartilhar clicado');
-                        },
-                        child: const Icon(
                           Icons.share,
                           size: 28,
                           color: Colors.white,
                         ),
                       ),
+
+                      // Botão com menu personalizado
+                      PopupMenuButton<String>(
+                        icon: const Icon(
+                          Icons.more_vert,
+                          size: 28,
+                          color: Colors.white,
+                        ),
+                        color: Colors.white,
+                        onSelected: (value) {
+                          print('Selecionado: $value');
+                          Navigator.pushNamed(context, value);
+                        },
+                        itemBuilder:
+                            (BuildContext context) => [
+                              PopupMenuItem<String>(
+                                value: '/podcast',
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.mic_outlined,
+                                      color: Colors.black,
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Podcast',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                      ),
                     ],
                   ),
                 ),
 
-                // Espaço maior entre ícones e imagem principal
                 const SizedBox(height: 280),
 
-                // Imagem principal
                 Container(
                   margin: const EdgeInsets.symmetric(
                     horizontal: 0,
@@ -71,10 +179,8 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
 
-                // Espaço menor entre imagem e botões
                 const SizedBox(height: 20),
 
-                // Três botões com imagem e texto
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: Row(
@@ -84,21 +190,21 @@ class HomePage extends StatelessWidget {
                         label: "",
                         imageAsset: 'assets/about_luke.png',
                         onTap: () {
-                          print('About Luke');
+                          Navigator.pushNamed(context, '/about');
                         },
                       ),
                       _ImageButton(
                         label: "",
                         imageAsset: 'assets/books_button.png',
                         onTap: () {
-                          print('Books');
+                          Navigator.pushNamed(context, '/books');
                         },
                       ),
                       _ImageButton(
                         label: "",
                         imageAsset: 'assets/messages_button.png',
                         onTap: () {
-                          print('Messages');
+                          Navigator.pushNamed(context, '/messages');
                         },
                       ),
                     ],
