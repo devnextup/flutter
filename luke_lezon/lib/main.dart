@@ -8,6 +8,7 @@ import 'pages/home_page.dart';
 import 'pages/about_page.dart';
 import 'pages/books_page.dart';
 import 'pages/messages_page.dart';
+import 'pages/podcast_page.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         '/about': (_) => const AboutPage(),
         '/books': (_) => const BooksPage(),
         '/messages': (_) => const MessagesPage(),
+        '/podcast': (_) => const PodcastPage(),
       },
     );
   }
