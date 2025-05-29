@@ -42,6 +42,7 @@ dependencies:
   audio_service: ^0.18.18
   just_audio: ^0.9.36
   provider: ^6.1.1
+  share_plus: ^11.0.0
 
 dev_dependencies:
   flutter_test:

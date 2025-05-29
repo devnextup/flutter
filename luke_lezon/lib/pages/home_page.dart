@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-// Você pode precisar de um pacote para exibir notificações locais se quiser
-// mostrar notificações visuais quando o app está em primeiro plano.
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:io';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('Usuário abriu a notificação');
-      // Você pode navegar para uma página específica aqui, se quiser.
+      // Navegação futura, se necessário
     });
 
     _firebaseMessaging.getToken().then((token) {
@@ -87,9 +87,19 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _compartilharApp() async {
+    final String link =
+        Platform.isAndroid
+            ? 'https://play.google.com/store/apps/details?id=com.seuapp.android'
+            : 'https://apps.apple.com/app/id0000000000';
+
+    final String mensagem = 'Confira este app incrível! Baixe agora:\n$link';
+
+    await SharePlus.instance.share(ShareParams(text: mensagem));
+  }
+
   @override
   Widget build(BuildContext context) {
-    // MANTÉM o mesmo conteúdo do seu `build()` atual (Stack, Column, etc.)
     return Scaffold(
       body: Stack(
         children: [
@@ -97,12 +107,10 @@ class _HomePageState extends State<HomePage> {
             child: Image.asset('assets/Luke_background.png', fit: BoxFit.cover),
           ),
 
-          // Conteúdo sobreposto
           SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                // Ícones do topo
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10.0,
@@ -112,17 +120,13 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          print('Idioma clicado');
-                        },
+                        onTap: _compartilharApp,
                         child: const Icon(
                           Icons.share,
                           size: 28,
                           color: Colors.white,
                         ),
                       ),
-
-                      // Botão com menu personalizado
                       PopupMenuButton<String>(
                         icon: const Icon(
                           Icons.more_vert,
@@ -131,7 +135,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                         color: Colors.white,
                         onSelected: (value) {
-                          print('Selecionado: $value');
                           Navigator.pushNamed(context, value);
                         },
                         itemBuilder:
