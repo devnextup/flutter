@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "521464985669",
+    "project_id": "harold-lefty-williams",
+    "storage_bucket": "harold-lefty-williams.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521464985669:android:d267d8d4cae6b4167e4b2c",
+        "android_client_info": {
+          "package_name": "com.example.harold_lefty_williams"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx8yEjBRy5n-3d4y_akpV3Xwo0Mmslg5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
