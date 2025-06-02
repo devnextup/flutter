@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.luke_lezon"
+    namespace = "app.android.lukelezon1"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -21,7 +21,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.luke_lezon"
+        applicationId = "app.android.lukelezon1"
         minSdk = 21
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
