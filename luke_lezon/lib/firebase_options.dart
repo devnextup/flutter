@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyARwvcIMW9bh5__BpEY-pjjsYa0HlA7pvk',
-    appId: '1:1063341631018:android:a56a1d7f053493e5d54553',
+    appId: '1:1063341631018:android:c42629e9fed8123ad54553',
     messagingSenderId: '1063341631018',
     projectId: 'luke-lezon-85e67',
     storageBucket: 'luke-lezon-85e67.firebasestorage.app',
@@ -63,11 +63,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCvRoZo9z2QOOLHf3Yj-Pj5A5bsN8bTRSA',
-    appId: '1:1063341631018:ios:cf8b8db0177461bdd54553',
+    appId: '1:1063341631018:ios:26573d5be3d53babd54553',
     messagingSenderId: '1063341631018',
     projectId: 'luke-lezon-85e67',
     storageBucket: 'luke-lezon-85e67.firebasestorage.app',
-    iosBundleId: 'com.example.lukeLezon',
+    iosBundleId: 'app.ios.lukelezon1',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
