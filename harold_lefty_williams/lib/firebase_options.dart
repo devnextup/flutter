@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,9 +28,15 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -40,19 +49,9 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBDUihOvaSJLM1YC3xLWfpIfQrbdlZnsso',
-    appId: '1:521464985669:web:6d8cd626c9a9011e7e4b2c',
-    messagingSenderId: '521464985669',
-    projectId: 'harold-lefty-williams',
-    authDomain: 'harold-lefty-williams.firebaseapp.com',
-    storageBucket: 'harold-lefty-williams.firebasestorage.app',
-    measurementId: 'G-EHL2DLEGZ8',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAx8yEjBRy5n-3d4y_akpV3Xwo0Mmslg5g',
-    appId: '1:521464985669:android:d267d8d4cae6b4167e4b2c',
+    appId: '1:521464985669:android:f5df7e5bc1ae87197e4b2c',
     messagingSenderId: '521464985669',
     projectId: 'harold-lefty-williams',
     storageBucket: 'harold-lefty-williams.firebasestorage.app',
@@ -60,29 +59,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCQ7jRbeaspojrbUwbdBsk2bVYQd2ng3zE',
-    appId: '1:521464985669:ios:8cfaf9cf799652e57e4b2c',
+    appId: '1:521464985669:ios:5fe583468c0609b37e4b2c',
     messagingSenderId: '521464985669',
     projectId: 'harold-lefty-williams',
     storageBucket: 'harold-lefty-williams.firebasestorage.app',
-    iosBundleId: 'com.example.haroldLeftyWilliams',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCQ7jRbeaspojrbUwbdBsk2bVYQd2ng3zE',
-    appId: '1:521464985669:ios:8cfaf9cf799652e57e4b2c',
-    messagingSenderId: '521464985669',
-    projectId: 'harold-lefty-williams',
-    storageBucket: 'harold-lefty-williams.firebasestorage.app',
-    iosBundleId: 'com.example.haroldLeftyWilliams',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBDUihOvaSJLM1YC3xLWfpIfQrbdlZnsso',
-    appId: '1:521464985669:web:d98426712b3bfb7a7e4b2c',
-    messagingSenderId: '521464985669',
-    projectId: 'harold-lefty-williams',
-    authDomain: 'harold-lefty-williams.firebaseapp.com',
-    storageBucket: 'harold-lefty-williams.firebasestorage.app',
-    measurementId: 'G-VHZX52R1C8',
+    iosBundleId: 'app.ios.haroldleftywilliams',
   );
 }

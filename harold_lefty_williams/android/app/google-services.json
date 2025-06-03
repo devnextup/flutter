@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:521464985669:android:f5df7e5bc1ae87197e4b2c",
+        "android_client_info": {
+          "package_name": "app.android.haroldleftywilliams"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx8yEjBRy5n-3d4y_akpV3Xwo0Mmslg5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:521464985669:android:d267d8d4cae6b4167e4b2c",
         "android_client_info": {
           "package_name": "com.example.harold_lefty_williams"

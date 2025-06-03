@@ -13,6 +13,7 @@ class SocialPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            Image.asset('assets/header.jpg'),
             const SizedBox(height: 24),
             SocialButton(
               label: 'Instagram',

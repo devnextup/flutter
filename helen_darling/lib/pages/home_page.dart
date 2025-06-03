@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-// Você pode precisar de um pacote para exibir notificações locais se quiser
-// mostrar notificações visuais quando o app está em primeiro plano.
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:helen_darling_app/services/purchase_service.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:io';
 
-// Converte HomePage para um StatefulWidget
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -13,123 +11,85 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-// O Estado associado ao HomePage
 class _HomePageState extends State<HomePage> {
-  // Opcional: Inicializar flutter_local_notifications se for usar para foreground
-  // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  //     FlutterLocalNotificationsPlugin();
-  final PurchaseService _purchaseService = PurchaseService();
-  bool _hasPremium = false;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin _localNotifications =
+      FlutterLocalNotificationsPlugin();
+
   @override
   void initState() {
     super.initState();
-    // Configura as notificações push (pede permissão e obtém token)
-    setupPushNotifications();
-    // Configura os listeners para lidar com as mensagens recebidas
-    setupMessageHandling();
-
-    // Opcional: Inicializar flutter_local_notifications
-    // final InitializationSettings initializationSettings =
-    //     InitializationSettings(
-    //         android: AndroidInitializationSettings('@mipmap/ic_launcher'), // Substitua pelo ícone do seu app
-    //         iOS: DarwinInitializationSettings(),
-    //         macOS: null,
-    //         linux: null);
-    // flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    _initPurchaseStatus();
+    _requestNotificationPermissions();
+    _initializeFirebaseMessaging();
+    _initializeLocalNotifications();
   }
 
-  Future<void> _initPurchaseStatus() async {
-    await _purchaseService.init();
-    final purchased = await _purchaseService.isPurchased();
-    setState(() {
-      _hasPremium = purchased;
-    });
-  }
-
-  // Função para solicitar permissão e obter o token do dispositivo
-  void setupPushNotifications() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-    // Solicita permissão do usuário
-    NotificationSettings settings = await messaging.requestPermission(
+  void _requestNotificationPermissions() async {
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,
-      announcement: false,
       badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
       sound: true,
     );
 
-    print('User granted permission: ${settings.authorizationStatus}');
-
-    // Se a permissão foi concedida, obtém o token
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      String? token = await messaging.getToken();
-      print("FCM Token: $token");
-
-      // TODO: Envie/Armazene este token (backend ou Firestore)
+      print('Permissões de notificação concedidas');
     } else {
-      print('User declined or has not accepted permission');
+      print('Permissões de notificação negadas');
     }
-
-    // Opcional: Listener para quando o token mudar
-    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
-      print('FCM Token refreshed: $newToken');
-      // TODO: Atualize o token no seu backend/Firestore
-    });
   }
 
-  // Função para configurar os listeners de mensagens
-  void setupMessageHandling() {
-    // 1. Lidar com mensagens em primeiro plano (app aberto e visível)
+  void _initializeFirebaseMessaging() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-        // TODO: O Firebase NÃO exibe notificações visuais automaticamente
-        // quando o app está em primeiro plano. Se você quiser mostrar
-        // uma notificação para o usuário neste caso, você precisa usar
-        // um pacote como flutter_local_notifications para criar e exibir
-        // uma notificação local usando os dados da RemoteMessage.
-        // Exemplo (se flutter_local_notifications estiver configurado):
-        // showLocalNotification(message);
-      }
+      _showLocalNotification(message);
     });
 
-    // 2. Lidar com o toque na notificação quando o app está em segundo plano ou encerrado
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
-      print('Message data: ${message.data}');
-      // TODO: Use os dados da mensagem (message.data) para navegar
-      // o usuário para a tela apropriada dentro do seu app.
-      // Navigator.pushNamed(context, '/sua_rota_baseada_nos_dados', arguments: message.data);
+      print('Usuário abriu a notificação');
     });
 
-    // 3. Lidar com a mensagem inicial se o app foi aberto do estado encerrado por uma notificação
-    FirebaseMessaging.instance.getInitialMessage().then((
-      RemoteMessage? message,
-    ) {
-      if (message != null) {
-        print('App opened from terminated state by a notification!');
-        print('Message data: ${message.data}');
-        // TODO: Use os dados da mensagem (message.data) para navegar
-        // o usuário para a tela apropriada assim que o app for inicializado.
-        // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //   Navigator.pushNamed(context, '/sua_rota_baseada_nos_dados', arguments: message.data);
-        // });
-      }
+    _firebaseMessaging.getToken().then((token) {
+      print('Token FCM: $token');
     });
-
-    // OBS: O handler de background (FirebaseMessaging.onBackgroundMessage)
-    // é configurado no main.dart e roda independentemente do estado do seu widget.
   }
 
-  // O método build permanece o mesmo
+  void _initializeLocalNotifications() {
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
+    const initSettings = InitializationSettings(android: androidSettings);
+    _localNotifications.initialize(initSettings);
+  }
+
+  void _showLocalNotification(RemoteMessage message) {
+    const androidDetails = AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      channelDescription: 'Canal para notificações em foreground',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    const platformDetails = NotificationDetails(android: androidDetails);
+
+    _localNotifications.show(
+      0,
+      message.notification?.title ?? 'Sem título',
+      message.notification?.body ?? 'Sem conteúdo',
+      platformDetails,
+    );
+  }
+
+  void _compartilharApp() async {
+    final link =
+        Platform.isAndroid
+            ? 'https://play.google.com/store/apps/details?id=com.seuapp.android'
+            : 'https://apps.apple.com/app/id0000000000';
+
+    final mensagem = 'Confira este app incrível! Baixe agora:\n$link';
+
+    await SharePlus.instance.share(ShareParams(text: mensagem));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,17 +150,17 @@ class _HomePageState extends State<HomePage> {
                               0,
                             ),
                             items: [
-                              PopupMenuItem<String>(
-                                value: '/settings',
+                              const PopupMenuItem<String>(
+                                value: 'share',
                                 child: Row(
-                                  children: const [
+                                  children: [
                                     Icon(
-                                      Icons.settings,
+                                      Icons.share_outlined,
                                       color: Color(0xFF9A9364),
                                     ),
                                     SizedBox(width: 8),
                                     Text(
-                                      'Settings',
+                                      'Compartilhar app',
                                       style: TextStyle(
                                         fontSize: 18,
                                         color: Color(0xFF9A9364),
@@ -209,36 +169,17 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                               ),
-                              PopupMenuItem<String>(
-                                value: '/profile',
+                              const PopupMenuItem<String>(
+                                value: '/meet',
                                 child: Row(
-                                  children: const [
+                                  children: [
                                     Icon(
-                                      Icons.person_outline,
+                                      Icons.event_available_outlined,
                                       color: Color(0xFF9A9364),
                                     ),
                                     SizedBox(width: 8),
                                     Text(
-                                      'Profile',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Color(0xFF9A9364),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem<String>(
-                                value: '/help',
-                                child: Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.help_outline,
-                                      color: Color(0xFF9A9364),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      'Help',
+                                      'Meet & Greet',
                                       style: TextStyle(
                                         fontSize: 18,
                                         color: Color(0xFF9A9364),
@@ -258,7 +199,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ).then((value) {
-                            if (value != null) {
+                            if (value == 'share') {
+                              _compartilharApp();
+                            } else if (value != null) {
                               Navigator.pushNamed(context, value);
                             }
                           });
